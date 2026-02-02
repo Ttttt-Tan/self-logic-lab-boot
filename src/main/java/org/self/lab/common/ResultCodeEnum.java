@@ -17,7 +17,7 @@ public enum ResultCodeEnum {
     SERVICE_ERROR(6001, "业务响应异常"),
     SERVICE_NULL(6002, "业务响应为空"),
     CONTROLLER_ERROR(6003, "请求响应异常"),
-
+    METHOD_ARGUMENT_NOT_VALID(6004, "参数校验失败"),
 
     FAILURE(6000, "未预期错误"),
     CUSTOMIZE_FAILURE(6001, "自定义message"),
@@ -29,4 +29,5 @@ public enum ResultCodeEnum {
     ;
     private final Integer code;
     private final String message;
+
 }

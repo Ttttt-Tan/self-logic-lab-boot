@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.self.lab.common.BaseResult;
 import org.self.lab.common.ResultCodeEnum;
 import org.self.lab.exception.SelfBusinessException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -31,5 +33,18 @@ public class GlobalExceptionHandler {
     public BaseResult handleBusinessException(SelfBusinessException e) {
         log.error("业务异常捕获: {}", e.getMessage());
         return new BaseResult(ResultCodeEnum.SERVICE_ERROR);
+    }
+
+    /**
+     * spring参数校验异常
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public BaseResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        if (bindingResult.hasErrors()) {
+            String defaultMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            return new BaseResult(ResultCodeEnum.CUSTOMIZE_FAILURE.getCode(), defaultMessage);
+        }
+        return new BaseResult(ResultCodeEnum.METHOD_ARGUMENT_NOT_VALID);
     }
 }

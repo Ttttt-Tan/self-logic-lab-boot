@@ -45,6 +45,10 @@ public class BaseResult implements Serializable {
         this.message = resultCodeEnum.getMessage();
     }
 
+    public BaseResult(Integer code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 
 
 
