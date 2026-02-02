@@ -29,8 +29,8 @@ public class BaseResult implements Serializable {
 
     public BaseResult(ServiceResult<?> serviceResult) {
         if (null == serviceResult) {
-            this.code = ResultCodeEnum.SYSTEM_ERROR.getCode();
-            this.message = ResultCodeEnum.SYSTEM_ERROR.getMessage();
+            this.code = ResultCodeEnum.SERVICE_NULL.getCode();
+            this.message = ResultCodeEnum.SERVICE_NULL.getMessage();
             return;
         }
         this.code = serviceResult.getCode();
@@ -44,6 +44,8 @@ public class BaseResult implements Serializable {
         this.code = resultCodeEnum.getCode();
         this.message = resultCodeEnum.getMessage();
     }
+
+
 
 
 }

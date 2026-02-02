@@ -13,7 +13,10 @@ import lombok.Getter;
 public enum ResultCodeEnum {
 
     SUCCESS(200, "成功"),
-    SYSTEM_ERROR(500, "系统响应异常"),
+
+    SERVICE_ERROR(6001, "业务响应异常"),
+    SERVICE_NULL(6002, "业务响应为空"),
+    CONTROLLER_ERROR(6003, "请求响应异常"),
 
 
     FAILURE(6000, "未预期错误"),

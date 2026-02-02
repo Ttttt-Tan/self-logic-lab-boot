@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.self.lab.common.ResultCodeEnum;
 import org.self.lab.common.ServicePageDataResult;
 import org.self.lab.common.ServiceResult;
+import org.self.lab.exception.SelfBusinessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class CommonServiceResultDemoServiceImpl {
 
 
     public ServiceResult<JSONObject> howToUseServiceResult(Integer id, String name) {
-        try {
             if (null == id || StringUtils.isBlank(name)) {
                 return ServiceResult.failure(ResultCodeEnum.PARAM_IS_NULL);
             }
@@ -32,15 +32,15 @@ public class CommonServiceResultDemoServiceImpl {
             }
 
             JSONObject obj = new JSONObject();
-
-            if (obj.containsKey(name) && id.equals(obj.getIntValue(name))) {
-                // 匹配到结果返回
-                return ServiceResult.success(obj);
+            if (obj.containsKey(name) ) {
+                if(id.equals(obj.getIntValue(name))){
+                    // 匹配到结果返回
+                    return ServiceResult.success(obj);
+                }else{
+                    throw new SelfBusinessException("用户查询到但是未匹配");
+                }
             }
             return ServiceResult.success();
-        } catch (Exception e) {
-            return ServiceResult.failure();
-        }
     }
 
 
