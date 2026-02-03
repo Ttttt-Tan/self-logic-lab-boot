@@ -12,6 +12,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -34,6 +35,10 @@ public class BusinessLogFilter implements Filter {
     public static final String BLUE = "\u001B[34m";
     public static final String RED = "\u001B[31m";
 
+    // 定义白名单前缀
+    private static final List<String> WHITE_LIST = Arrays.asList(
+             "/v3/api-docs", "/swagger-ui", "/webjars", "/favicon.ico"
+    );
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
@@ -43,6 +48,15 @@ public class BusinessLogFilter implements Filter {
             filterChain.doFilter(request, response);
             return;
         }
+        String uri = servletRequest.getRequestURI();
+        // 判断是否在白名单中
+        boolean isWhite = WHITE_LIST.stream().anyMatch(uri::startsWith);
+
+        if (isWhite) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 2. 包装可重复读
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(servletRequest);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(servletResponse);

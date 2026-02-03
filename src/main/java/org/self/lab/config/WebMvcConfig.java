@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
 /**
 
  */
@@ -19,7 +21,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        List<String> excludePathPatterns = List.of(
+                "/swagger-ui.html",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/webjars/**",
+                "/favicon.ico"
+        );
+
         registry.addInterceptor(paramValidationInterceptor())
-                .addPathPatterns("/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns(excludePathPatterns);
+
     }
 }
