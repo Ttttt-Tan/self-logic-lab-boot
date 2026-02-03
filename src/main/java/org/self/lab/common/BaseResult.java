@@ -1,6 +1,7 @@
 package org.self.lab.common;
 
 import lombok.Data;
+import org.slf4j.MDC;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,6 +23,8 @@ public class BaseResult implements Serializable {
     private Object data;
 
     private Long timestamp=System.currentTimeMillis();
+
+    private String selfTraceId= MDC.get(SelfConstants.SELF_TRACE_ID);
 
 
     public BaseResult() {
