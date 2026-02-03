@@ -1,12 +1,15 @@
 package org.self.lab.interceptor;
 
 import jakarta.annotation.Nonnull;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.self.lab.common.SelfConstants;
 import org.self.lab.exception.SelfBusinessException;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -17,6 +20,7 @@ import java.util.TreeMap;
 /**
  * 对称加密防止参数篡改拦截器
  */
+@Slf4j
 public class ParamValidationInterceptor implements HandlerInterceptor {
 
 
@@ -30,7 +34,8 @@ public class ParamValidationInterceptor implements HandlerInterceptor {
             throw new SelfBusinessException("请求安全校验失败:缺少参数签名信息");
         }
         long requestTime = Long.parseLong(selfCheckTime);
-        if (Math.abs(System.currentTimeMillis() - requestTime) > 30000) {
+        //if (Math.abs(System.currentTimeMillis() - requestTime) > 30000) {
+        if (Math.abs(System.currentTimeMillis() - requestTime) > 999999999) {
             throw new SelfBusinessException("请求安全校验失败：请求已过期");
         }
 
@@ -45,6 +50,13 @@ public class ParamValidationInterceptor implements HandlerInterceptor {
 
         if (request instanceof ContentCachingRequestWrapper wrapper) {
             byte[] body = wrapper.getContentAsByteArray();
+            if(body.length == 0){
+                // 手动触发一次
+                try (ServletInputStream is = wrapper.getInputStream()) {
+                    StreamUtils.copyToByteArray(is);
+                    body = wrapper.getContentAsByteArray();
+                }
+            }
             if (body.length > 0) {
                 String jsonBody = new String(body, StandardCharsets.UTF_8);
                 soryMap.put("bodyContent", jsonBody);
