@@ -5,6 +5,11 @@ spring:
     default-property-inclusion: non_null
   application:
     name: self-logic-lab-boot
+#  data: 本地暂无redis实例
+#    redis:
+#      host: localhost
+#      port: 6379
+#      password:
 
 
 springdoc:
@@ -22,3 +27,5 @@ logging:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%X{selfTraceId}]){cyan} %clr(%5p) %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"
   level:
     root: info
+
+

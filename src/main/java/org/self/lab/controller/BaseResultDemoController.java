@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.self.lab.common.BaseResult;
 import org.self.lab.common.ServiceResult;
-import org.self.lab.service.CommonServiceResultDemoServiceImpl;
+import org.self.lab.service.CommonServiceResultDemoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "演示接口", description = "用于测试 BaseResult")
 public class BaseResultDemoController {
 
-    private final CommonServiceResultDemoServiceImpl commonServiceResultDemoService;
+    private final CommonServiceResultDemoService commonServiceResultDemoService;
 
 
     @GetMapping("/howToUseBaseResultForVoid")

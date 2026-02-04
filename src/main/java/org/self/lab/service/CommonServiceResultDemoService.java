@@ -17,7 +17,7 @@ import java.util.Objects;
  * 什么场景应该用哪个ServiceResult的静态方法
  */
 @Service
-public class CommonServiceResultDemoServiceImpl {
+public class CommonServiceResultDemoService {
 
 
     public ServiceResult<JSONObject> howToUseServiceResult(Integer id, String name) {
