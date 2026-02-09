@@ -6,13 +6,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.self.lab.annotation.IgnoreParamCheck;
 import org.self.lab.common.SelfConstants;
 import org.self.lab.exception.SelfBusinessException;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,6 +32,14 @@ public class ParamValidationInterceptor implements HandlerInterceptor {
 
         String selfCheckTime = request.getParameter(SelfConstants.SELF_CHECK_TIME);
         String selfValidation = request.getParameter(SelfConstants.SELF_VALIDATION);
+
+        HandlerMethod methodInfo = (HandlerMethod) handler;
+        Class<?> beanType = methodInfo.getBeanType();
+        IgnoreParamCheck[] annotationsByType = beanType.getAnnotationsByType(IgnoreParamCheck.class);
+        if (annotationsByType.length > 0 || methodInfo.hasMethodAnnotation(IgnoreParamCheck.class)) {
+            return true;
+        }
+
 
         if (StringUtils.isBlank(selfCheckTime) || StringUtils.isBlank(selfValidation)) {
             throw new SelfBusinessException("请求安全校验失败:缺少参数签名信息");
